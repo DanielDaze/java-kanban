@@ -11,6 +11,7 @@ public class TaskManager {
     public HashMap<Integer, Epic> epics;
     public HashMap<Integer, SubTask> subTasks;
 
+
     private int seq = 0;
 
     public int generateId() {
@@ -97,8 +98,8 @@ public class TaskManager {
         subTasks.remove(id);
     }
 
-    public void printSubTasksInEpic(Epic epic) {
-        System.out.println(epic.getSubTasks());
+    public void printSubTasksInEpic(int epicId) {
+        System.out.println(epics.get(epicId).getSubTasks());
     }
 
     public TaskManager() { // Дефолтный конструктор

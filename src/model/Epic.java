@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 
 public class Epic extends Task {
-    private ArrayList<SubTask> subTasks;
+    ArrayList<SubTask> subTasks;
 
     public ArrayList<SubTask> getSubTasks() {
         return subTasks;
@@ -33,7 +33,7 @@ public class Epic extends Task {
         return allDONE;
     }
 
-    public void setEpicStatus() {
+    public void calculateStatus() {
         if (subTasks.isEmpty() || checkIfAllNEW()) {
             status = Status.NEW;
         } else if (checkIfAllDONE()) {
@@ -56,5 +56,6 @@ public class Epic extends Task {
 
     public Epic(String title, String description, Status status) {
         super(title, description, status);
+        this.subTasks = new ArrayList<>();
     }
 }

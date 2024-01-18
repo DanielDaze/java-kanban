@@ -48,7 +48,7 @@ public class Task {
                 '}';
     }
 
-    public Task(String title, String description, Status status) { //Конструктор
+    public Task(String title, String description, Status status) {
         this.title = title;
         this.description = description;
         this.status = status;

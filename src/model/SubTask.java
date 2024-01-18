@@ -1,20 +1,20 @@
 package model;
 
 public class SubTask extends Task {
-    private int epicId; //Показывает, к какому эпику относится
+    private Epic epic; // Показывает, к какому эпику относится
 
-    public int getEpicId() {
-        return epicId;
+    public Epic getEpic() {
+        return epic;
     }
 
-    public void setEpicId(int epicId) {
-        this.epicId = epicId;
+    public void setEpic(Epic epic) {
+        this.epic = epic;
     }
 
     @Override
     public String toString() {
         return "SubTask{" +
-                "epicId=" + epicId +
+                "epic=" + epic +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", id=" + id +
@@ -24,6 +24,6 @@ public class SubTask extends Task {
 
     public SubTask(String title, String description, Status status, Epic epic) {
         super(title, description, status);
-        this.epicId = epic.id;
+        this.epic = epic;
     }
 }
