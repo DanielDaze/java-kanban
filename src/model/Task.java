@@ -1,10 +1,10 @@
 package model;
 
 public class Task {
-    protected String title; // Название
-    protected String description; // Описание
     protected int id;
-    protected Status status; // Статус (значение enum Status)
+    protected String title;
+    protected String description;
+    protected Status status;
 
     public String getTitle() {
         return title;
