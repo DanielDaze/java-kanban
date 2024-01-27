@@ -6,6 +6,7 @@ import java.util.Objects;
 public class Epic extends Task {
     private final ArrayList<Integer> subTasksIds;
 
+
     public ArrayList<Integer> getSubTasksIds() {
         return subTasksIds;
     }
@@ -14,9 +15,9 @@ public class Epic extends Task {
     public String toString() {
         return "Epic{" +
                 "subTasksIds=" + subTasksIds +
+                ", id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", id=" + id +
                 ", status=" + status +
                 '}';
     }

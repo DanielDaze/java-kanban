@@ -1,74 +1,63 @@
 import model.*;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import service.InMemoryTaskManager;
+import service.Managers;
+import service.TaskManager;
 
 public class InMemoryTaskManagerTest {
-    static InMemoryTaskManager taskManager0 = new InMemoryTaskManager();
-    static InMemoryTaskManager taskManager3 = new InMemoryTaskManager();
-    static InMemoryTaskManager taskManager11 = new InMemoryTaskManager();
 
-    @BeforeAll
-    static void beforeAll() {
+    TaskManager taskManager = Managers.getDefault();
+
+    @BeforeEach
+    void beforeEach() {
         Task task1 = new Task("1 задача", "описание 1 задачи", Status.NEW);
-        taskManager0.createTask(task1);
-        taskManager3.createTask(task1);
+        taskManager.createTask(task1);
         Task task2 = new Task("2 задача", "описание 2 задачи", Status.NEW);
-        taskManager3.createTask(task2);
-        taskManager0.createTask(task2);
+        taskManager.createTask(task2);
 
         Epic epic1 = new Epic("1 эпик", "описание 1 эпика", Status.NEW);
-        SubTask subTask1 = new SubTask("1 подзадача", "1 эпик", Status.NEW, 3);
-        taskManager3.createSubTask(subTask1);
-        taskManager0.createSubTask(subTask1);
-        SubTask subTask2 = new SubTask("2 подзадача", "1 эпик", Status.NEW, 3);
-        taskManager3.createSubTask(subTask2);
-        taskManager0.createSubTask(subTask2);
-        epic1.getSubTasksIds().add(subTask1.getId());
-        epic1.getSubTasksIds().add(subTask2.getId());
-        taskManager3.createEpic(epic1);
-        taskManager0.createEpic(epic1);
-
-        taskManager3.getTaskById(1);
-        taskManager3.getEpicById(5);
-        taskManager3.getSubTaskById(3);
-
-        taskManager11.getTaskById(1);
-        taskManager11.getTaskById(1);
-        taskManager11.getTaskById(1);
-        taskManager11.getTaskById(1);
-        taskManager11.getTaskById(1);
-        taskManager11.getTaskById(1);
-        taskManager11.getTaskById(1);
-        taskManager11.getTaskById(1);
-        taskManager11.getTaskById(1);
-        taskManager11.getTaskById(1);
-        taskManager11.getTaskById(3);
-
+        taskManager.createEpic(epic1);
+        SubTask subTask1 = new SubTask("1 подзадача", "1 эпик", Status.NEW, epic1.getId());
+        taskManager.createSubTask(subTask1);
+        epic1.getSubTasksIds().add(taskManager.getSubTaskById(4).getId());
+        Epic epic2 = new Epic("2 эпик", "описание 2 эпика", Status.NEW);
+        SubTask subTask2 = new SubTask("2 подзадача", "1 эпик", Status.NEW, epic1.getId());
+        taskManager.createSubTask(subTask2);
+        epic2.getSubTasksIds().add(taskManager.getSubTaskById(5).getId());
     }
-
-    @Test
-    void shouldReturn3Tasks() {
-        Assertions.assertEquals(3, taskManager3.historyManager.getHistory().size());
-    }
-
-    @Test
-    void shouldReturnNull() {
-        Assertions.assertNull(taskManager0.historyManager.getHistory());
-    }
-
-    @Test
-    void shouldReturnPositiveIfOver11() {
-        Assertions.assertSame(taskManager11.historyManager.getHistory().getFirst(), taskManager11.getTaskById(3));
-    }
-
     @Test
     void shouldPrintAll() {
-        taskManager3.getAll();
-        System.out.println("История:");
-        for (Task task : taskManager3.historyManager.getHistory()) {
-            System.out.println(task);
-        }
+        taskManager.getAll();
+    }
+
+    @Test
+    void shouldClearEachList() {
+        taskManager.clearTasks();
+        taskManager.clearEpics();
+        taskManager.clearSubTasks();
+
+        Assertions.assertEquals(0, taskManager.getTasks().size());
+        Assertions.assertEquals(0, taskManager.getEpics().size());
+        Assertions.assertEquals(0, taskManager.getSubTasks().size());
+    }
+
+    @Test
+    void shouldGetNewTasks() {
+        Task newTask = new Task("изм_задача", "изм_описание", Status.IN_PROGRESS);
+        newTask.setId(1);
+        taskManager.updateTask(newTask, 1);
+        Assertions.assertEquals(newTask, taskManager.getTaskById(1));
+
+        Epic newEpic = new Epic("изм_задача", "изм_описание", Status.IN_PROGRESS);
+        newEpic.setId(3);
+        newEpic.getSubTasksIds().add(4);
+        taskManager.updateEpic(newEpic, 3);
+        Assertions.assertEquals(newEpic, taskManager.getEpicById(3));
+
+        SubTask newSubTask = new SubTask("изм_задача", "изм_описание", Status.DONE, 3);
+        newSubTask.setId(4);
+        taskManager.updateSubTask(newSubTask, 4);
+        Assertions.assertEquals(newSubTask, taskManager.getSubTaskById(4));
     }
 }
