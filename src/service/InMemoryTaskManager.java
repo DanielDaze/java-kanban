@@ -191,7 +191,7 @@ public class InMemoryTaskManager implements TaskManager {
             int checkNumber = 0;
             boolean checkIfAllNEW = false;
             boolean checkIfAllDONE = false;
-            for (int i = 0; i < epic.getSubTasksIds().size() - 1; i++) {
+            for (int i = 0; i < epic.getSubTasksIds().size(); i++) {
                 if (subTasks.get(epic.getSubTasksIds().get(i)).getStatus() == Status.NEW) {
                     checkNumber++;
                     if (checkNumber == epic.getSubTasksIds().size()) {
@@ -199,7 +199,7 @@ public class InMemoryTaskManager implements TaskManager {
                     }
                 }
             }
-            for (int i = 0; i < epic.getSubTasksIds().size() - 1; i++) {
+            for (int i = 0; i < epic.getSubTasksIds().size(); i++) {
                 if (subTasks.get(epic.getSubTasksIds().get(i)).getStatus() == Status.DONE) {
                     checkNumber++;
                     if (checkNumber == epic.getSubTasksIds().size()) {

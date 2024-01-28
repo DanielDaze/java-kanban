@@ -60,4 +60,19 @@ public class InMemoryTaskManagerTest {
         taskManager.updateSubTask(newSubTask, 4);
         Assertions.assertEquals(newSubTask, taskManager.getSubTaskById(4));
     }
+
+    @Test
+    void shouldBeEqual() {
+        Task task = new Task("задача", "описание", Status.NEW);
+        task.setId(1);
+        Assertions.assertEquals(task, taskManager.getTaskById(1));
+
+        Epic epic = new Epic("задача", "описание", Status.NEW);
+        epic.setId(3);
+        Assertions.assertEquals(epic, taskManager.getEpicById(3));
+
+        SubTask subTask = new SubTask("задача", "описание", Status.NEW, 2);
+        subTask.setId(4);
+        Assertions.assertEquals(subTask, taskManager.getSubTaskById(4));
+    }
 }
