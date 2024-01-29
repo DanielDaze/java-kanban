@@ -8,6 +8,4 @@ public interface HistoryManager {
     void add(Task task);
 
     ArrayList<Task> getHistory();
-
-    public void checkIfViewedTasksIsOver10();
 }

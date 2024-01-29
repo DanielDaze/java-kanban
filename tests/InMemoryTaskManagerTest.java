@@ -62,7 +62,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    void shouldBeEqual() {
+    void tasksShouldBeEqualById() {
         Task task = new Task("задача", "описание", Status.NEW);
         task.setId(1);
         Assertions.assertEquals(task, taskManager.getTaskById(1));
@@ -75,4 +75,23 @@ public class InMemoryTaskManagerTest {
         subTask.setId(4);
         Assertions.assertEquals(subTask, taskManager.getSubTaskById(4));
     }
+
+    @Test
+    void removedTasksShouldBeNull() {
+        taskManager.removeTaskById(1);
+        taskManager.removeEpicById(3);
+        Assertions.assertNull(taskManager.getTaskById(1));
+        Assertions.assertNull(taskManager.getEpicById(3));
+    }
+
+    @Test
+    void taskMapsShouldBeEmpty() {
+        taskManager.clearTasks();
+        taskManager.clearEpics();
+        taskManager.clearSubTasks();
+        Assertions.assertEquals(0, taskManager.getTasks().size());
+        Assertions.assertEquals(0, taskManager.getEpics().size());
+        Assertions.assertEquals(0, taskManager.getSubTasks().size());
+    }
+
 }

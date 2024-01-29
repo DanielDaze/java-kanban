@@ -7,8 +7,7 @@ import java.util.ArrayList;
 public class InMemoryHistoryManager implements HistoryManager {
     private final ArrayList<Task> viewedTasks = new ArrayList<>();
 
-    @Override
-    public void checkIfViewedTasksIsOver10() {
+    private void checkIfViewedTasksIsOver10() {
         if (viewedTasks.size() == 10) {
             viewedTasks.removeFirst();
         }
@@ -25,6 +24,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void add(Task task) {
+        checkIfViewedTasksIsOver10();
         viewedTasks.add(task);
     }
 

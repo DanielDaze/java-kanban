@@ -4,10 +4,12 @@ import model.Epic;
 import model.SubTask;
 import model.Task;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public interface TaskManager {
-    int generateId();
+
+    ArrayList<Task> getHistory();
 
     void getAll();
 
@@ -16,8 +18,6 @@ public interface TaskManager {
     HashMap<Integer, Epic> getEpics();
 
     HashMap<Integer, SubTask> getSubTasks();
-
-    HistoryManager getHistoryManager();
 
     void clearTasks();
 
@@ -50,6 +50,4 @@ public interface TaskManager {
     void removeSubTaskById(int id);
 
     void printSubTasksInEpic(int epicId);
-
-    void calculateStatusForEpics();
 }

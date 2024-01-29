@@ -57,16 +57,16 @@ public class InMemoryHistoryManagerTest {
 
     @Test
     void shouldReturn3Tasks() {
-        Assertions.assertEquals(3, taskManager3.getHistoryManager().getHistory().size());
+        Assertions.assertEquals(3, taskManager3.getHistory().size());
     }
 
     @Test
     void shouldReturnNull() {
-        Assertions.assertNull(taskManager0.getHistoryManager().getHistory());
+        Assertions.assertNull(taskManager0.getHistory());
     }
 
     @Test
     void shouldReturnPositiveIfOver11() {
-        Assertions.assertSame(taskManager11.getHistoryManager().getHistory().getFirst(), taskManager11.getTaskById(2));
+        Assertions.assertSame(taskManager11.getHistory().getFirst(), taskManager11.getTaskById(2));
     }
 }

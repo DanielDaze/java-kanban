@@ -5,6 +5,7 @@ import model.Status;
 import model.SubTask;
 import model.Task;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class InMemoryTaskManager implements TaskManager {
@@ -29,14 +30,15 @@ public class InMemoryTaskManager implements TaskManager {
         return subTasks;
     }
 
-    public HistoryManager getHistoryManager() {
-        return historyManager;
+    @Override
+    public ArrayList<Task> getHistory() {
+        return historyManager.getHistory();
     }
 
-    @Override
-    public int generateId() {
+    private int generateId() {
         return ++seq;
     }
+
     @Override
     public void getAll() {
         for (Task task : tasks.values()) {
@@ -74,21 +76,18 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task getTaskById(int id) {
-        historyManager.checkIfViewedTasksIsOver10();
         historyManager.add(tasks.get(id));
         return tasks.get(id);
     }
 
     @Override
     public Epic getEpicById(int id) {
-        historyManager.checkIfViewedTasksIsOver10();
         historyManager.add(epics.get(id));
         return epics.get(id);
     }
 
     @Override
     public SubTask getSubTaskById(int id) {
-        historyManager.checkIfViewedTasksIsOver10();
         historyManager.add(subTasks.get(id));
         return subTasks.get(id);
     }
@@ -165,6 +164,7 @@ public class InMemoryTaskManager implements TaskManager {
                 subTasks.remove(subTaskId);
             }
             epics.remove(id);
+            System.out.println("Задача удалена");
         } else {
             System.out.println("Задачи с таким id еще нет");
         }
@@ -175,6 +175,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (subTasks.containsKey(id)) {
             subTasks.remove(id);
             calculateStatusForEpics();
+            System.out.println("Задача удалена");
         } else {
             System.out.println("Задачи с таким id еще нет");
         }
@@ -185,7 +186,6 @@ public class InMemoryTaskManager implements TaskManager {
         System.out.println(epics.get(epicId).getSubTasksIds());
     }
 
-    @Override
     public void calculateStatusForEpics() {
         for (Epic epic : epics.values()) {
             int checkNumber = 0;
