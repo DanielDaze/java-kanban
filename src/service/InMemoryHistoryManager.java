@@ -2,19 +2,18 @@ package service;
 
 import model.Task;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.LinkedList;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private final ArrayList<Task> viewedTasks = new ArrayList<>();
+    private final LinkedList<Task> viewedTasks = new LinkedList<>();
 
-    private void checkIfViewedTasksIsOver10() {
-        if (viewedTasks.size() == 10) {
-            viewedTasks.removeFirst();
-        }
+    private static class Node {
+
     }
 
     @Override
-    public ArrayList<Task> getHistory() {
+    public List<Task> getHistory() {
         if (!viewedTasks.isEmpty()) {
             return viewedTasks;
         } else {
@@ -28,4 +27,14 @@ public class InMemoryHistoryManager implements HistoryManager {
         viewedTasks.add(task);
     }
 
+    @Override
+    public void remove(int id) {
+        // TODO
+    }
+
+    private void checkIfViewedTasksIsOver10() {
+        if (viewedTasks.size() == 10) {
+            viewedTasks.removeFirst();
+        }
+    }
 }

@@ -5,8 +5,8 @@ import model.Status;
 import model.SubTask;
 import model.Task;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
     private final HashMap<Integer, Task> tasks;
@@ -31,7 +31,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Task> getHistory() {
+    public List<Task> getHistory() {
         return historyManager.getHistory();
     }
 
@@ -40,7 +40,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void getAll() {
+    public void printAll() {
         for (Task task : tasks.values()) {
             System.out.println(task);
         }
@@ -51,7 +51,6 @@ public class InMemoryTaskManager implements TaskManager {
             System.out.println(subTask);
         }
     }
-
 
     @Override
     public void clearTasks() {
@@ -93,21 +92,21 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void createTask(Task task) {
+    public void create(Task task) {
         task.setId(generateId());
         tasks.put(task.getId(), task);
     }
 
     @Override
-    public void createEpic(Epic epic) {
+    public void create(Epic epic) {
         epic.setId(generateId());
         epics.put(epic.getId(), epic);
     }
 
     @Override
-    public void createSubTask(SubTask subTask) {
-            subTask.setId(generateId());
-            subTasks.put(subTask.getId(), subTask);
+    public void create(SubTask subTask) {
+        subTask.setId(generateId());
+        subTasks.put(subTask.getId(), subTask);
     }
 
     @Override
@@ -151,6 +150,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void removeTaskById(int id) {
         if (tasks.containsKey(id)) {
             tasks.remove(id);
+            historyManager.remove(id);
             System.out.println("Задача удалена");
         } else {
             System.out.println("Задачи с таким id еще нет");
@@ -164,6 +164,7 @@ public class InMemoryTaskManager implements TaskManager {
                 subTasks.remove(subTaskId);
             }
             epics.remove(id);
+            historyManager.remove(id);
             System.out.println("Задача удалена");
         } else {
             System.out.println("Задачи с таким id еще нет");
@@ -175,6 +176,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (subTasks.containsKey(id)) {
             subTasks.remove(id);
             calculateStatusForEpics();
+            historyManager.remove(id);
             System.out.println("Задача удалена");
         } else {
             System.out.println("Задачи с таким id еще нет");
@@ -217,7 +219,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    public InMemoryTaskManager() { // Дефолтный конструктор
+    public InMemoryTaskManager() {
         tasks = new HashMap<>();
         epics = new HashMap<>();
         subTasks = new HashMap<>();
