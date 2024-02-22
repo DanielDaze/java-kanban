@@ -12,18 +12,18 @@ public class InMemoryTaskManagerTest {
     @BeforeEach
     void beforeEach() {
         Task task1 = new Task("1 задача", "описание 1 задачи", Status.NEW);
-        taskManager.create(task1);
+        taskManager.createTask(task1);
         Task task2 = new Task("2 задача", "описание 2 задачи", Status.NEW);
-        taskManager.create(task2);
+        taskManager.createTask(task2);
 
         Epic epic1 = new Epic("1 эпик", "описание 1 эпика", Status.NEW);
-        taskManager.create(epic1);
+        taskManager.createEpic(epic1);
         SubTask subTask1 = new SubTask("1 подзадача", "1 эпик", Status.NEW, epic1.getId());
-        taskManager.create(subTask1);
+        taskManager.createSubTask(subTask1);
         epic1.getSubTasksIds().add(taskManager.getSubTaskById(4).getId());
         Epic epic2 = new Epic("2 эпик", "описание 2 эпика", Status.NEW);
         SubTask subTask2 = new SubTask("2 подзадача", "1 эпик", Status.NEW, epic1.getId());
-        taskManager.create(subTask2);
+        taskManager.createSubTask(subTask2);
         epic2.getSubTasksIds().add(taskManager.getSubTaskById(5).getId());
     }
     @Test
@@ -77,14 +77,6 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    void removedTasksShouldBeNull() {
-        taskManager.removeTaskById(1);
-        taskManager.removeEpicById(3);
-        Assertions.assertNull(taskManager.getTaskById(1));
-        Assertions.assertNull(taskManager.getEpicById(3));
-    }
-
-    @Test
     void taskMapsShouldBeEmpty() {
         taskManager.clearTasks();
         taskManager.clearEpics();
@@ -94,4 +86,21 @@ public class InMemoryTaskManagerTest {
         Assertions.assertEquals(0, taskManager.getSubTasks().size());
     }
 
+    @Test
+    void checkTasksDeletion() {
+        taskManager.removeTaskById(1);
+        Assertions.assertEquals(1, taskManager.getTasks().size());
+    }
+
+    @Test
+    void checkSubTasksDeletion() {
+        taskManager.removeSubTaskById(5);
+        Assertions.assertEquals(1, taskManager.getSubTasks().size());
+    }
+
+    @Test
+    void checkEpicsDeletion() {
+        taskManager.removeEpicById(3);
+        Assertions.assertEquals(0, taskManager.getEpics().size());
+    }
 }

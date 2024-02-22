@@ -31,11 +31,11 @@ public interface TaskManager {
 
     Epic getEpicById(int id);
 
-    void create(Task task);
+    void createTask(Task task);
 
-    void create(Epic epic);
+    void createEpic(Epic epic);
 
-    void create(SubTask subTask);
+    void createSubTask(SubTask subTask);
 
     void updateTask(Task newTask, int id);
 

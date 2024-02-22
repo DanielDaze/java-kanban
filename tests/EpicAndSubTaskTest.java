@@ -13,11 +13,11 @@ public class EpicAndSubTaskTest {
     @BeforeEach
     void beforeEach() {
         Epic epic1 = new Epic("1 эпик", "описание 1 эпика", Status.NEW);
-        taskManager.create(epic1);
+        taskManager.createEpic(epic1);
         SubTask subTask1 = new SubTask("1 подзадача", "1 эпик", Status.NEW, epic1.getId());
-        taskManager.create(subTask1);
+        taskManager.createSubTask(subTask1);
         SubTask subTask2 = new SubTask("2 подзадача", "1 эпик", Status.NEW, epic1.getId());
-        taskManager.create(subTask2);
+        taskManager.createSubTask(subTask2);
         epic1.getSubTasksIds().add(subTask1.getId());
         epic1.getSubTasksIds().add(subTask2.getId());
     }

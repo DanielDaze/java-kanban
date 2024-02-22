@@ -11,7 +11,7 @@ public class TaskTest {
 
     @BeforeEach
     void beforeEach() {
-        taskManager.create(new Task("название", "описание", Status.IN_PROGRESS));
+        taskManager.createTask(new Task("название", "описание", Status.IN_PROGRESS));
     }
 
     @Test

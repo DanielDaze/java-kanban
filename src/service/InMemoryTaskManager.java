@@ -92,19 +92,19 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void create(Task task) {
+    public void createTask(Task task) {
         task.setId(generateId());
         tasks.put(task.getId(), task);
     }
 
     @Override
-    public void create(Epic epic) {
+    public void createEpic(Epic epic) {
         epic.setId(generateId());
         epics.put(epic.getId(), epic);
     }
 
     @Override
-    public void create(SubTask subTask) {
+    public void createSubTask(SubTask subTask) {
         subTask.setId(generateId());
         subTasks.put(subTask.getId(), subTask);
     }
@@ -162,6 +162,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (epics.containsKey(id)) {
             for (int subTaskId : getEpicById(id).getSubTasksIds()) {
                 subTasks.remove(subTaskId);
+                historyManager.remove(subTaskId);
             }
             epics.remove(id);
             historyManager.remove(id);
