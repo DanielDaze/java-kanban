@@ -27,7 +27,7 @@ public class InMemoryTaskManagerTest {
         epic2.getSubTasksIds().add(taskManager.getSubTaskById(5).getId());
     }
     @Test
-    void shouldPrintAll() {
+    void shouldGetAll() {
         taskManager.getAll();
     }
 
@@ -77,14 +77,6 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    void removedTasksShouldBeNull() {
-        taskManager.removeTaskById(1);
-        taskManager.removeEpicById(3);
-        Assertions.assertNull(taskManager.getTaskById(1));
-        Assertions.assertNull(taskManager.getEpicById(3));
-    }
-
-    @Test
     void taskMapsShouldBeEmpty() {
         taskManager.clearTasks();
         taskManager.clearEpics();
@@ -94,4 +86,21 @@ public class InMemoryTaskManagerTest {
         Assertions.assertEquals(0, taskManager.getSubTasks().size());
     }
 
+    @Test
+    void checkTasksDeletion() {
+        taskManager.removeTaskById(1);
+        Assertions.assertEquals(1, taskManager.getTasks().size());
+    }
+
+    @Test
+    void checkSubTasksDeletion() {
+        taskManager.removeSubTaskById(5);
+        Assertions.assertEquals(1, taskManager.getSubTasks().size());
+    }
+
+    @Test
+    void checkEpicsDeletion() {
+        taskManager.removeEpicById(3);
+        Assertions.assertEquals(0, taskManager.getEpics().size());
+    }
 }
