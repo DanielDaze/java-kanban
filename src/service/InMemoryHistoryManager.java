@@ -8,18 +8,6 @@ import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private static class Node {
-        Task item;
-        Node next;
-        Node prev;
-
-        Node(Node prev, Task element, Node next) {
-            this.item = element;
-            this.next = next;
-            this.prev = prev;
-        }
-    }
-
     private final HashMap<Integer, Node> history = new HashMap<>();
     Node first;
     Node last;
@@ -35,7 +23,6 @@ public class InMemoryHistoryManager implements HistoryManager {
             lastNode.next = newNode;
         }
         history.put(newNode.item.getId(), newNode);
-
     }
 
     private void removeNode(Node node) {
@@ -67,7 +54,6 @@ public class InMemoryHistoryManager implements HistoryManager {
         return tasks;
     }
 
-
     @Override
     public void add(Task task) {
         remove(task.getId());
@@ -83,6 +69,18 @@ public class InMemoryHistoryManager implements HistoryManager {
     public void remove(int id) {
         if (history.containsKey(id)) {
             removeNode(history.get(id));
+        }
+    }
+
+    private static class Node {
+        Task item;
+        Node next;
+        Node prev;
+
+        Node(Node prev, Task element, Node next) {
+            this.item = element;
+            this.next = next;
+            this.prev = prev;
         }
     }
 }

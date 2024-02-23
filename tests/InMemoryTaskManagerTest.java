@@ -27,8 +27,8 @@ public class InMemoryTaskManagerTest {
         epic2.getSubTasksIds().add(taskManager.getSubTaskById(5).getId());
     }
     @Test
-    void shouldPrintAll() {
-        taskManager.printAll();
+    void shouldGetAll() {
+        taskManager.getAll();
     }
 
     @Test

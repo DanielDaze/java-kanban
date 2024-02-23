@@ -11,7 +11,7 @@ public interface TaskManager {
 
     List<Task> getHistory();
 
-    void printAll();
+    void getAll();
 
     HashMap<Integer, Task> getTasks();
 

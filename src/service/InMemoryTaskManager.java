@@ -40,7 +40,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void printAll() {
+    public void getAll() {
         for (Task task : tasks.values()) {
             System.out.println(task);
         }
