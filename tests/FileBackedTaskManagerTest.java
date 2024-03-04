@@ -14,7 +14,7 @@ public class FileBackedTaskManagerTest {
     Path historyData;
 
     @Test
-    void test() {
+    void newManagerShouldReturnTasksFromPreviousManager() {
         try {
             savedData = Files.createTempFile("savedData", ".csv");
             historyData = Files.createTempFile("historyData", ".csv");
