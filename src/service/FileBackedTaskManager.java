@@ -6,12 +6,14 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.List;
 
 import static model.TaskType.*;
 
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
-    Path savedData = Path.of("savedData.csv");
-    Path historyData = Path.of("historyData.csv");
+    public HistoryManager historyManager = Managers.getDefaultHistory();
+    Path savedData;
+    Path historyData;
 
     private void save() throws ManagerSaveException {
         HashMap<Integer, Task> tasks = getTasks();
@@ -32,6 +34,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         } catch (IOException e) {
             throw new ManagerSaveException("Произошла ошибка во время записи информации в файл");
         }
+    }
+
+    private void saveHistory() {
         try (FileWriter writer = new FileWriter(String.valueOf(historyData))) {
             writer.append(historyToString(historyManager));
         } catch (IOException e) {
@@ -76,11 +81,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         StringBuilder history = new StringBuilder("id,type,name,status,description,epic/subtasks" + "\n");
         for (Task task : manager.getHistory()) {
             if (task instanceof Epic epic) {
-                history.append(epicToString(epic)).append("\n");
+                history.append(epicToString(epic));
             } else if (task instanceof SubTask subTask) {
-                history.append(subTaskToString(subTask)).append("\n");
+                history.append(subTaskToString(subTask));
             } else {
-                history.append(taskToString(task)).append("\n");
+                history.append(taskToString(task));
             }
         }
         return history.toString();
@@ -90,7 +95,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         try (BufferedReader reader = new BufferedReader(new FileReader(historyData.toString(), StandardCharsets.UTF_8))) {
             while (reader.ready()) {
                 String value = reader.readLine();
-                getHistory().add(fromString(value));
+                Task task = fromString(value);
+                if (task != null) {
+                    historyManager.add(task);
+                }
             }
         }
     }
@@ -147,6 +155,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public FileBackedTaskManager(Path savedData, Path historyData) {
+        this.savedData = savedData;
+        this.historyData = historyData;
     }
 
     @Override
@@ -224,21 +237,26 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     @Override
     public Task getTaskById(int id) {
         historyManager.add(getTasks().get(id));
-        save();
+        saveHistory();
         return getTasks().get(id);
     }
 
     @Override
     public Epic getEpicById(int id) {
         historyManager.add(getEpics().get(id));
-        save();
+        saveHistory();
         return getEpics().get(id);
     }
 
     @Override
     public SubTask getSubTaskById(int id) {
         historyManager.add(getSubTasks().get(id));
-        save();
+        saveHistory();
         return getSubTasks().get(id);
+    }
+
+    @Override
+    public List<Task> getHistory() {
+        return historyManager.getHistory();
     }
 }
