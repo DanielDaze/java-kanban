@@ -6,12 +6,10 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.HashMap;
-import java.util.List;
 
 import static model.TaskType.*;
 
-public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
-    public HistoryManager historyManager = Managers.getDefaultHistory();
+public class FileBackedTaskManager extends InMemoryTaskManager {
     Path savedData;
     Path historyData;
 
@@ -253,10 +251,5 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         historyManager.add(getSubTasks().get(id));
         saveHistory();
         return getSubTasks().get(id);
-    }
-
-    @Override
-    public List<Task> getHistory() {
-        return historyManager.getHistory();
     }
 }
