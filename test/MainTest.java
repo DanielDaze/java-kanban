@@ -6,6 +6,9 @@ import org.junit.jupiter.api.Test;
 import service.Managers;
 import service.TaskManager;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class MainTest {
     TaskManager taskManager = Managers.getDefault();
 
@@ -18,11 +21,11 @@ public class MainTest {
 
         Epic epic1 = new Epic("1 эпик", "описание 1 эпика", Status.NEW);
         taskManager.createEpic(epic1);
-        taskManager.createSubTask(new SubTask("1 подзадача", "1 эпик", Status.NEW, epic1.getId()));
+        taskManager.createSubTask(new SubTask("1 подзадача", "1 эпик", Status.NEW, Duration.ofMinutes(28), LocalDateTime.of(2022, 10, 22, 22, 30), epic1.getId()));
         epic1.getSubTasksIds().add(taskManager.getSubTaskById(4).getId());
-        taskManager.createSubTask(new SubTask("2 подзадача", "1 эпик", Status.NEW, epic1.getId()));
+        taskManager.createSubTask(new SubTask("2 подзадача", "1 эпик", Status.NEW, Duration.ofMinutes(48), LocalDateTime.of(2023, 11, 23, 8, 31), epic1.getId()));
         epic1.getSubTasksIds().add(taskManager.getSubTaskById(5).getId());
-        taskManager.createSubTask(new SubTask("3 подзадача", "1 эпик", Status.NEW, epic1.getId()));
+        taskManager.createSubTask(new SubTask("3 подзадача", "1 эпик", Status.NEW, Duration.ofMinutes(35), LocalDateTime.of(2021, 8, 10, 21, 32), epic1.getId()));
         epic1.getSubTasksIds().add(taskManager.getSubTaskById(6).getId());
         Epic epic2 = new Epic("2 эпик", "описание 2 эпика", Status.NEW);
         taskManager.createEpic(epic2);

@@ -1,9 +1,15 @@
-import model.*;
+import model.Epic;
+import model.SubTask;
+import model.Task;
+import model.Status;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import service.Managers;
 import service.TaskManager;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public class InMemoryTaskManagerTest {
 
@@ -18,11 +24,11 @@ public class InMemoryTaskManagerTest {
 
         Epic epic1 = new Epic("1 эпик", "описание 1 эпика", Status.NEW);
         taskManager.createEpic(epic1);
-        SubTask subTask1 = new SubTask("1 подзадача", "1 эпик", Status.NEW, epic1.getId());
+        SubTask subTask1 = new SubTask("1 подзадача", "1 эпик", Status.NEW, Duration.ofMinutes(15), LocalDateTime.of(2020, 10, 8, 11, 30), epic1.getId());
         taskManager.createSubTask(subTask1);
         epic1.getSubTasksIds().add(taskManager.getSubTaskById(4).getId());
         Epic epic2 = new Epic("2 эпик", "описание 2 эпика", Status.NEW);
-        SubTask subTask2 = new SubTask("2 подзадача", "1 эпик", Status.NEW, epic1.getId());
+        SubTask subTask2 = new SubTask("2 подзадача", "1 эпик", Status.NEW, Duration.ofMinutes(15), LocalDateTime.of(2020, 10, 8, 11, 30), epic1.getId());
         taskManager.createSubTask(subTask2);
         epic2.getSubTasksIds().add(taskManager.getSubTaskById(5).getId());
     }
@@ -55,7 +61,7 @@ public class InMemoryTaskManagerTest {
         taskManager.updateEpic(newEpic, 3);
         Assertions.assertEquals(newEpic, taskManager.getEpicById(3));
 
-        SubTask newSubTask = new SubTask("изм_задача", "изм_описание", Status.DONE, 3);
+        SubTask newSubTask = new SubTask("изм_задача", "изм_описание", Status.DONE, Duration.ofMinutes(10), LocalDateTime.of(2024, 8, 8, 8, 8), 3);
         newSubTask.setId(4);
         taskManager.updateSubTask(newSubTask, 4);
         Assertions.assertEquals(newSubTask, taskManager.getSubTaskById(4));
@@ -71,7 +77,7 @@ public class InMemoryTaskManagerTest {
         epic.setId(3);
         Assertions.assertEquals(epic, taskManager.getEpicById(3));
 
-        SubTask subTask = new SubTask("задача", "описание", Status.NEW, 2);
+        SubTask subTask = new SubTask("задача", "описание", Status.NEW, Duration.ofMinutes(12), LocalDateTime.of(2024, 9, 9, 9, 9), 2);
         subTask.setId(4);
         Assertions.assertEquals(subTask, taskManager.getSubTaskById(4));
     }
