@@ -24,15 +24,16 @@ public class InMemoryTaskManagerTest {
 
         Epic epic1 = new Epic("1 эпик", "описание 1 эпика", Status.NEW);
         taskManager.createEpic(epic1);
+        taskManager.getEpics().get(3).getSubTasksIds().add(4);
         SubTask subTask1 = new SubTask("1 подзадача", "1 эпик", Status.NEW, Duration.ofMinutes(17), LocalDateTime.of(2023, 10, 8, 11, 30), epic1.getId());
         taskManager.createSubTask(subTask1);
-        taskManager.getEpics().get(3).getSubTasksIds().add(4);
 
         Epic epic2 = new Epic("2 эпик", "описание 2 эпика", Status.NEW);
         taskManager.createEpic(epic2);
+        taskManager.getEpics().get(5).getSubTasksIds().add(6);
         SubTask subTask2 = new SubTask("2 подзадача", "2 эпик", Status.NEW, Duration.ofMinutes(15), LocalDateTime.of(2024, 10, 8, 11, 30), epic2.getId());
         taskManager.createSubTask(subTask2);
-        taskManager.getEpics().get(5).getSubTasksIds().add(6);
+        taskManager.getEpicById(5);
     }
     @Test
     void shouldGetAll() {
@@ -112,4 +113,6 @@ public class InMemoryTaskManagerTest {
         taskManager.removeEpicById(5);
         Assertions.assertEquals(0, taskManager.getEpics().size());
     }
+
+
 }

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 public class DurationAndDateTest {
     @Test
-    public void test() {
+    public void shouldGetStartTimeDurationEndTime() {
         TaskManager taskManager = Managers.getDefault();
         Task task1 = new Task("1 задача", "описание 1 задачи", Status.NEW, Duration.ofMinutes(30), LocalDateTime.of(2024, 3, 16, 8, 30));
         taskManager.createTask(task1);
@@ -35,7 +35,7 @@ public class DurationAndDateTest {
     }
 
     @Test
-    public void test2() {
+    public void overlappingTaskShouldntBeCreated() {
         TaskManager taskManager = Managers.getDefault();
         Task task1 = new Task("1 задача", "описание 1 задачи", Status.NEW, Duration.ofMinutes(30), LocalDateTime.of(2024, 3, 16, 8, 30));
         taskManager.createTask(task1);

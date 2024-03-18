@@ -17,21 +17,54 @@ public class EpicAndSubTaskTest {
     void beforeEach() {
         Epic epic1 = new Epic("1 эпик", "описание 1 эпика", Status.NEW);
         taskManager.createEpic(epic1);
-        SubTask subTask1 = new SubTask("1 подзадача", "1 эпик", Status.NEW, Duration.ofMinutes(30), LocalDateTime.of(2025, 12, 12, 21, 30), epic1.getId());
+    }
+
+    @Test
+    void epicStatusShouldBeNEW() {
+        SubTask subTask1 = new SubTask("1 подзадача", "1 эпик", Status.NEW, Duration.ofMinutes(30), LocalDateTime.of(2023, 12, 12, 21, 30), 1);
         taskManager.createSubTask(subTask1);
-        SubTask subTask2 = new SubTask("2 подзадача", "1 эпик", Status.NEW, Duration.ofMinutes(50), LocalDateTime.of(2022, 11, 10, 11, 24), epic1.getId());
+        SubTask subTask2 = new SubTask("2 подзадача", "1 эпик", Status.NEW, Duration.ofMinutes(30), LocalDateTime.of(2023, 12, 12, 19, 30), 1);
         taskManager.createSubTask(subTask2);
-        epic1.getSubTasksIds().add(subTask1.getId());
-        epic1.getSubTasksIds().add(subTask2.getId());
+        taskManager.getEpics().get(1).getSubTasksIds().add(subTask1.getId());
+        taskManager.getEpics().get(1).getSubTasksIds().add(subTask2.getId());
+        taskManager.getEpicById(1);
+        Assertions.assertEquals(taskManager.getEpics().get(1).getStatus(), Status.NEW);
     }
 
     @Test
-    void shouldBecomeString() {
-        System.out.println(taskManager.getSubTaskById(2).toString());
+    void epicStatusShouldBeDONE() {
+        SubTask subTask1 = new SubTask("1 подзадача", "1 эпик", Status.DONE, Duration.ofMinutes(30), LocalDateTime.of(2023, 12, 12, 21, 30), 1);
+        taskManager.createSubTask(subTask1);
+        SubTask subTask2 = new SubTask("2 подзадача", "1 эпик", Status.DONE, Duration.ofMinutes(30), LocalDateTime.of(2023, 12, 12, 19, 30), 1);
+        taskManager.createSubTask(subTask2);
+        taskManager.getEpics().get(1).getSubTasksIds().add(subTask1.getId());
+        taskManager.getEpics().get(1).getSubTasksIds().add(subTask2.getId());
+        taskManager.getEpicById(1);
+        Assertions.assertEquals(taskManager.getEpics().get(1).getStatus(), Status.DONE);
     }
 
     @Test
-    void shouldGetEpicIdFromSubTask() {
-        Assertions.assertEquals(1, taskManager.getSubTaskById(2).getEpicId());
+    void epicStatusShouldBeIN_PROGRESS() {
+        SubTask subTask1 = new SubTask("1 подзадача", "1 эпик", Status.IN_PROGRESS, Duration.ofMinutes(30), LocalDateTime.of(2023, 12, 12, 21, 30), 1);
+        taskManager.createSubTask(subTask1);
+        SubTask subTask2 = new SubTask("2 подзадача", "1 эпик", Status.IN_PROGRESS, Duration.ofMinutes(30), LocalDateTime.of(2023, 12, 12, 19, 30), 1);
+        taskManager.createSubTask(subTask2);
+        taskManager.getEpics().get(1).getSubTasksIds().add(subTask1.getId());
+        taskManager.getEpics().get(1).getSubTasksIds().add(subTask2.getId());
+        taskManager.getEpicById(1);
+        Assertions.assertEquals(taskManager.getEpics().get(1).getStatus(), Status.IN_PROGRESS);
+    }
+
+    @Test
+    void epicDateTimeTest() {
+        SubTask subTask1 = new SubTask("1 подзадача", "1 эпик", Status.NEW, Duration.ofMinutes(30), LocalDateTime.of(2023, 12, 12, 21, 30), 1);
+        taskManager.createSubTask(subTask1);
+        SubTask subTask2 = new SubTask("2 подзадача", "1 эпик", Status.NEW, Duration.ofMinutes(30), LocalDateTime.of(2023, 12, 12, 19, 30), 1);
+        taskManager.createSubTask(subTask2);
+        taskManager.getEpics().get(1).getSubTasksIds().add(subTask1.getId());
+        taskManager.getEpics().get(1).getSubTasksIds().add(subTask2.getId());
+        taskManager.getEpicById(1);
+        Assertions.assertEquals(taskManager.getEpics().get(1).getDuration(), Duration.ofMinutes(60));
+        Assertions.assertEquals(taskManager.getEpics().get(1).getEndTime(), LocalDateTime.of(2023, 12, 12, 19, 30).plus(taskManager.getEpics().get(1).getDuration()));
     }
 }
