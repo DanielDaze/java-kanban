@@ -17,20 +17,22 @@ public class InMemoryTaskManagerTest {
 
     @BeforeEach
     void beforeEach() {
-        Task task1 = new Task("1 задача", "описание 1 задачи", Status.NEW);
+        Task task1 = new Task("1 задача", "описание 1 задачи", Status.NEW, Duration.ofMinutes(10), LocalDateTime.of(2021, 10, 8, 11, 30));
         taskManager.createTask(task1);
-        Task task2 = new Task("2 задача", "описание 2 задачи", Status.NEW);
+        Task task2 = new Task("2 задача", "описание 2 задачи", Status.NEW, Duration.ofMinutes(8), LocalDateTime.of(2022, 10, 8, 11, 30));
         taskManager.createTask(task2);
 
         Epic epic1 = new Epic("1 эпик", "описание 1 эпика", Status.NEW);
         taskManager.createEpic(epic1);
-        SubTask subTask1 = new SubTask("1 подзадача", "1 эпик", Status.NEW, Duration.ofMinutes(15), LocalDateTime.of(2020, 10, 8, 11, 30), epic1.getId());
+        SubTask subTask1 = new SubTask("1 подзадача", "1 эпик", Status.NEW, Duration.ofMinutes(17), LocalDateTime.of(2023, 10, 8, 11, 30), epic1.getId());
         taskManager.createSubTask(subTask1);
-        epic1.getSubTasksIds().add(taskManager.getSubTaskById(4).getId());
+        taskManager.getEpics().get(3).getSubTasksIds().add(4);
+
         Epic epic2 = new Epic("2 эпик", "описание 2 эпика", Status.NEW);
-        SubTask subTask2 = new SubTask("2 подзадача", "1 эпик", Status.NEW, Duration.ofMinutes(15), LocalDateTime.of(2020, 10, 8, 11, 30), epic1.getId());
+        taskManager.createEpic(epic2);
+        SubTask subTask2 = new SubTask("2 подзадача", "2 эпик", Status.NEW, Duration.ofMinutes(15), LocalDateTime.of(2024, 10, 8, 11, 30), epic2.getId());
         taskManager.createSubTask(subTask2);
-        epic2.getSubTasksIds().add(taskManager.getSubTaskById(5).getId());
+        taskManager.getEpics().get(5).getSubTasksIds().add(6);
     }
     @Test
     void shouldGetAll() {
@@ -100,13 +102,14 @@ public class InMemoryTaskManagerTest {
 
     @Test
     void checkSubTasksDeletion() {
-        taskManager.removeSubTaskById(5);
+        taskManager.removeSubTaskById(6);
         Assertions.assertEquals(1, taskManager.getSubTasks().size());
     }
 
     @Test
     void checkEpicsDeletion() {
         taskManager.removeEpicById(3);
+        taskManager.removeEpicById(5);
         Assertions.assertEquals(0, taskManager.getEpics().size());
     }
 }

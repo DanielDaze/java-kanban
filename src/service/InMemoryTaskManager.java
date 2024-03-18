@@ -97,12 +97,11 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void createTask(Task task) {
         task.setId(generateId());
-        try {
-            checkTasksOverlapping(task);
-        } catch (DateTimeConflict e) {
-            System.out.println(e.getMessage());
+        if (checkTasksOverlapping(task)) {
+            System.out.println("Данная задача совпадает по времени с одной из ранее созданных");
+        } else {
+            tasks.put(task.getId(), task);
         }
-        tasks.put(task.getId(), task);
     }
 
     @Override
@@ -114,12 +113,11 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void createSubTask(SubTask subTask) {
         subTask.setId(generateId());
-        try {
-            checkTasksOverlapping(subTask);
-        } catch (DateTimeConflict e) {
-            System.out.println(e.getMessage());
+        if (checkTasksOverlapping(subTask)) {
+            System.out.println("Данная задача совпадает по времени с одной из ранее созданных");
+        } else {
+            subTasks.put(subTask.getId(), subTask);
         }
-        subTasks.put(subTask.getId(), subTask);
     }
 
     @Override
@@ -208,19 +206,36 @@ public class InMemoryTaskManager implements TaskManager {
     public TreeSet<Task> getPrioritizedTasks() {
         Comparator<Task> byStartTime = Comparator.comparing(Task::getStartTime);
         TreeSet<Task> prioritizedTasks = new TreeSet<>(byStartTime);
-        prioritizedTasks.addAll(tasks.values());
-        prioritizedTasks.addAll(epics.values());
-        prioritizedTasks.addAll(subTasks.values());
+        if (!tasks.isEmpty()) {
+            prioritizedTasks.addAll(tasks.values());
+        }
+
+        if (!epics.isEmpty()) {
+            for (Epic epic : epics.values()) {
+                if (epic.getStartTime() != null) {
+                    prioritizedTasks.add(epic);
+                }
+            }
+        }
+
+        if (!subTasks.isEmpty()) {
+            prioritizedTasks.addAll(subTasks.values());
+        }
         return prioritizedTasks;
     }
 
-    private void checkTasksOverlapping(Task task) throws DateTimeConflict {
+    private boolean checkTasksOverlapping(Task task) {
+        boolean overlapping = false;
         TreeSet<Task> prioritizedTasks = getPrioritizedTasks();
-        for (Task prioritizedTask : prioritizedTasks) {
-            if (task.getStartTime().isBefore(prioritizedTask.getEndTime()) || task.getEndTime().isAfter(prioritizedTask.getStartTime())) {
-                throw new DateTimeConflict("Время выполнения новой задачи пересекается с одной (или более) из ранее созданных");
+        if (!prioritizedTasks.isEmpty()) {
+            for (Task prioritizedTask : prioritizedTasks) {
+                if (task.getStartTime().isBefore(prioritizedTask.getEndTime()) && task.getEndTime().isAfter(prioritizedTask.getStartTime())) {
+                    overlapping = true;
+                    break;
+                }
             }
         }
+        return overlapping;
     }
 
     private void calculateStatusForEpics() {

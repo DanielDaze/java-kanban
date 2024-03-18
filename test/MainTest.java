@@ -14,9 +14,9 @@ public class MainTest {
 
     @Test
     void test() {
-        Task task1 = new Task("1 задача", "описание 1 задачи", Status.NEW);
+        Task task1 = new Task("1 задача", "описание 1 задачи", Status.NEW, Duration.ofMinutes(20), LocalDateTime.of(2021, 4, 21, 19, 30));
         taskManager.createTask(task1);
-        Task task2 = new Task("2 задача", "описание 2 задачи", Status.NEW);
+        Task task2 = new Task("2 задача", "описание 2 задачи", Status.NEW, Duration.ofMinutes(7), LocalDateTime.of(2012, 12, 21, 12, 0));
         taskManager.createTask(task2);
 
         Epic epic1 = new Epic("1 эпик", "описание 1 эпика", Status.NEW);
