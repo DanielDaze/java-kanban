@@ -2,6 +2,7 @@ import model.Epic;
 import model.Status;
 import model.SubTask;
 import model.Task;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import service.FileBackedTaskManager;
 
@@ -40,5 +41,6 @@ public class FileBackedTaskManagerTest {
         for (Task task : restoredManager.getHistory()) {
             System.out.println(task);
         }
+        Assertions.assertEquals(3, taskManager.getTasks().size() + taskManager.getEpics().size() + taskManager.getSubTasks().size());
     }
 }

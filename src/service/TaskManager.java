@@ -1,5 +1,6 @@
 package service;
 
+import model.DateTimeConflict;
 import model.Epic;
 import model.SubTask;
 import model.Task;
@@ -34,7 +35,7 @@ public interface TaskManager {
 
     Epic getEpicById(int id);
 
-    void createTask(Task task);
+    void createTask(Task task) throws DateTimeConflict;
 
     void createEpic(Epic epic);
 

@@ -1,7 +1,7 @@
 import model.Epic;
+import model.Status;
 import model.SubTask;
 import model.Task;
-import model.Status;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -114,5 +114,9 @@ public class InMemoryTaskManagerTest {
         Assertions.assertEquals(0, taskManager.getEpics().size());
     }
 
-
+    @Test
+    void shouldGetSubTasksForEpic() {
+        taskManager.printSubTasksInEpic(3);
+        Assertions.assertEquals(4, taskManager.getEpics().get(3).getSubTasksIds().getFirst());
+    }
 }

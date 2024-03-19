@@ -33,7 +33,7 @@ public class InMemoryTaskManager implements TaskManager {
         return historyManager.getHistory();
     }
 
-    private int generateId() {
+    int generateId() {
         return ++seq;
     }
 
@@ -102,10 +102,14 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void createTask(Task task) {
         task.setId(generateId());
-        if (checkTasksOverlapping(task)) {
-            System.out.println("Данная задача совпадает по времени с одной из ранее созданных");
-        } else {
-            tasks.put(task.getId(), task);
+        try {
+            if (checkTasksOverlapping(task)) {
+                throw new DateTimeConflict("Данная задача совпадает по времени с одной из ранее созданных");
+            } else {
+                tasks.put(task.getId(), task);
+            }
+        } catch (DateTimeConflict e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -118,10 +122,14 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void createSubTask(SubTask subTask) {
         subTask.setId(generateId());
-        if (checkTasksOverlapping(subTask)) {
-            System.out.println("Данная задача совпадает по времени с одной из ранее созданных");
-        } else {
-            subTasks.put(subTask.getId(), subTask);
+        try {
+            if (checkTasksOverlapping(subTask)) {
+                throw new DateTimeConflict("Данная задача совпадает по времени с одной из ранее созданных");
+            } else {
+                subTasks.put(subTask.getId(), subTask);
+            }
+        } catch (DateTimeConflict e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -249,33 +257,35 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     private void calculateStatusForEpics() {
-        for (Epic epic : epics.values()) {
-            int checkNumber = 0;
-            boolean checkIfAllNEW = false;
-            boolean checkIfAllDONE = false;
-            if (!epic.getSubTasksIds().isEmpty()) {
-                for (int i = 0; i < epic.getSubTasksIds().size(); i++) {
-                    if (subTasks.get(epic.getSubTasksIds().get(i)).getStatus() == Status.NEW) {
-                        checkNumber++;
-                        if (checkNumber == epic.getSubTasksIds().size()) {
-                            checkIfAllNEW = true;
+        if (!epics.values().isEmpty()) {
+            for (Epic epic : epics.values()) {
+                int checkNumber = 0;
+                boolean checkIfAllNEW = false;
+                boolean checkIfAllDONE = false;
+                if (!epic.getSubTasksIds().isEmpty()) {
+                    for (int i = 0; i < epic.getSubTasksIds().size(); i++) {
+                        if (subTasks.get(epic.getSubTasksIds().get(i)).getStatus() == Status.NEW) {
+                            checkNumber++;
+                            if (checkNumber == epic.getSubTasksIds().size()) {
+                                checkIfAllNEW = true;
+                            }
                         }
                     }
-                }
-                for (int i = 0; i < epic.getSubTasksIds().size(); i++) {
-                    if (subTasks.get(epic.getSubTasksIds().get(i)).getStatus() == Status.DONE) {
-                        checkNumber++;
-                        if (checkNumber == epic.getSubTasksIds().size()) {
-                            checkIfAllDONE = true;
+                    for (int i = 0; i < epic.getSubTasksIds().size(); i++) {
+                        if (subTasks.get(epic.getSubTasksIds().get(i)).getStatus() == Status.DONE) {
+                            checkNumber++;
+                            if (checkNumber == epic.getSubTasksIds().size()) {
+                                checkIfAllDONE = true;
+                            }
                         }
                     }
-                }
-                if (checkIfAllNEW) {
-                    epic.setStatus(Status.NEW);
-                } else if (checkIfAllDONE) {
-                    epic.setStatus(Status.DONE);
-                } else {
-                    epic.setStatus(Status.IN_PROGRESS);
+                    if (checkIfAllNEW) {
+                        epic.setStatus(Status.NEW);
+                    } else if (checkIfAllDONE) {
+                        epic.setStatus(Status.DONE);
+                    } else {
+                        epic.setStatus(Status.IN_PROGRESS);
+                    }
                 }
             }
         }

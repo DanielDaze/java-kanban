@@ -11,6 +11,7 @@ public class Task {
     protected Status status;
     protected Duration duration;
     protected LocalDateTime startTime;
+    protected LocalDateTime endTime;
 
     public String getTitle() {
         return title;
@@ -61,7 +62,10 @@ public class Task {
     }
 
     public LocalDateTime getEndTime() {
-        return startTime.plus(duration);
+        if (endTime == null) {
+            endTime = startTime.plus(duration);
+        }
+        return endTime;
     }
 
     @Override

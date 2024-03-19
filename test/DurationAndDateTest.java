@@ -1,7 +1,5 @@
-import model.Epic;
-import model.Status;
-import model.SubTask;
-import model.Task;
+import model.*;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import service.Managers;
 import service.TaskManager;
@@ -26,12 +24,11 @@ public class DurationAndDateTest {
         SubTask subtask2 = new SubTask("сабтаск", "описание саба", Status.IN_PROGRESS, Duration.ofMinutes(5), LocalDateTime.of(2024, 5, 10, 17, 50), epic.getId());
         taskManager.createSubTask(subtask2);
         taskManager.getAll();
-        System.out.println(taskManager.getTaskById(1).getEndTime());
-        System.out.println(taskManager.getEpicById(2).getEndTime());
-        System.out.println(taskManager.getSubTaskById(3).getEndTime());
+        Assertions.assertEquals(task1.getStartTime().plus(task1.getDuration()), taskManager.getTaskById(1).getEndTime());
+        Assertions.assertEquals(epic.getStartTime().plus(epic.getDuration()), taskManager.getEpicById(2).getEndTime());
+        Assertions.assertEquals(subTask.getStartTime().plus(subTask.getDuration()), taskManager.getSubTaskById(3).getEndTime());
 
-        taskManager.getPrioritizedTasks()
-                .forEach(System.out::println);
+        Assertions.assertTrue(taskManager.getPrioritizedTasks().getFirst().getStartTime().isBefore(taskManager.getPrioritizedTasks().getLast().getStartTime()));
     }
 
     @Test
@@ -42,5 +39,6 @@ public class DurationAndDateTest {
         taskManager.getTaskById(1);
         Task overlappingTask = new Task("1 задача", "описание 1 задачи", Status.NEW, Duration.ofMinutes(50), LocalDateTime.of(2024, 3, 16, 8, 20));
         taskManager.createTask(overlappingTask);
+        Assertions.assertEquals(1, taskManager.getTasks().size());
     }
 }
