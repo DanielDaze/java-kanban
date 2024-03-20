@@ -8,9 +8,18 @@ import java.util.Objects;
 public class Epic extends Task {
 
     private final ArrayList<Integer> subTasksIds;
+    private LocalDateTime endTime;
 
     public ArrayList<Integer> getSubTasksIds() {
         return subTasksIds;
+    }
+
+    @Override
+    public LocalDateTime getEndTime() {
+        if (endTime == null) {
+            endTime = startTime.plus(duration);
+        }
+        return endTime;
     }
 
     @Override
