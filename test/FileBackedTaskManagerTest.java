@@ -2,12 +2,15 @@ import model.Epic;
 import model.Status;
 import model.SubTask;
 import model.Task;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import service.FileBackedTaskManager;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public class FileBackedTaskManagerTest {
     Path savedData;
@@ -22,21 +25,22 @@ public class FileBackedTaskManagerTest {
             throw new RuntimeException(e);
         }
         FileBackedTaskManager taskManager = new FileBackedTaskManager(savedData, historyData);
-        Task task1 = new Task("1 задача", "описание 1 задачи", Status.NEW);
+        Task task1 = new Task("1 задача", "описание 1 задачи", Status.NEW, Duration.ofMinutes(30), LocalDateTime.of(2024, 3, 16, 8, 30));
         taskManager.createTask(task1);
         taskManager.getTaskById(1);
         Epic epic = new Epic("эпик", "описание эпика", Status.IN_PROGRESS);
-        epic.getSubTasksIds().add(3);
         taskManager.createEpic(epic);
-        taskManager.getEpicById(2);
-        SubTask subTask = new SubTask("сабтаск", "описание саба", Status.IN_PROGRESS, 2);
+        taskManager.getEpicById(2).getSubTasksIds().add(3);
+        SubTask subTask = new SubTask("сабтаск", "описание саба", Status.IN_PROGRESS, Duration.ofMinutes(45), LocalDateTime.of(2024, 5, 10, 19, 50), epic.getId());
         taskManager.createSubTask(subTask);
         taskManager.getSubTaskById(3);
+        taskManager.getAll();
         FileBackedTaskManager restoredManager = new FileBackedTaskManager(savedData, historyData);
         restoredManager.loadFromFile();
         restoredManager.getAll();
         for (Task task : restoredManager.getHistory()) {
             System.out.println(task);
         }
+        Assertions.assertEquals(3, taskManager.getTasks().size() + taskManager.getEpics().size() + taskManager.getSubTasks().size());
     }
 }

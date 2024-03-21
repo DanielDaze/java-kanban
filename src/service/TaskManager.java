@@ -1,11 +1,13 @@
 package service;
 
+import model.DateTimeConflict;
 import model.Epic;
 import model.SubTask;
 import model.Task;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeSet;
 
 public interface TaskManager {
 
@@ -19,6 +21,8 @@ public interface TaskManager {
 
     HashMap<Integer, SubTask> getSubTasks();
 
+    TreeSet<Task> getPrioritizedTasks();
+
     void clearTasks();
 
     void clearEpics();
@@ -31,7 +35,7 @@ public interface TaskManager {
 
     Epic getEpicById(int id);
 
-    void createTask(Task task);
+    void createTask(Task task) throws DateTimeConflict;
 
     void createEpic(Epic epic);
 

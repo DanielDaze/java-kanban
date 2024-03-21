@@ -1,5 +1,7 @@
 package model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class SubTask extends Task {
@@ -18,6 +20,8 @@ public class SubTask extends Task {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", status=" + status +
+                ", duration=" + duration +
+                ", startTime=" + startTime +
                 '}';
     }
 
@@ -35,8 +39,8 @@ public class SubTask extends Task {
         return Objects.hash(super.hashCode(), epicId);
     }
 
-    public SubTask(String title, String description, Status status, int epicId) {
-        super(title, description, status);
+    public SubTask(String title, String description, Status status, Duration duration, LocalDateTime startTime, int epicId) {
+        super(title, description, status, duration, startTime);
         this.epicId = epicId;
     }
 }
