@@ -9,7 +9,6 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import exception.DateTimeConflict;
-import model.Status;
 import model.task.Epic;
 import model.task.SubTask;
 import model.task.Task;
@@ -32,6 +31,7 @@ public class HttpTaskServer {
             .setPrettyPrinting()
             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
             .registerTypeAdapter(Duration.class, new DurationAdapter())
+            .serializeNulls()
             .create();
 
     private static class LocalDateTimeTypeAdapter extends TypeAdapter<LocalDateTime> {
@@ -215,7 +215,6 @@ public class HttpTaskServer {
                     }
                 }
             } catch (DateTimeConflict e) {
-                // TODO (не выводится ошибка в Insomnia)
                 sendResponse(exchange, 406, "Данная задача пересекается по времени с существующими");
             }
         }
@@ -276,7 +275,6 @@ public class HttpTaskServer {
                 try {
                     int id = Integer.parseInt(uriSplit[2]);
                     if (taskMap.containsKey(id)) {
-                        // TODO (плохо калькулируется инф-я по эпику)
                         Epic epic = manager.getEpicById(id);
                         sendResponse(exchange, 200, gson.toJson(epic));
                     } else {
@@ -409,14 +407,6 @@ public class HttpTaskServer {
     }
 
     public static void main(String[] args) throws IOException {
-        manager.createTask(new Task("Задание", "Описание", Status.NEW, Duration.ofMinutes(30), LocalDateTime.of(2024, 12, 12, 12, 30)));
-//        Epic epic = new Epic("эпик", "описание эпика", Status.IN_PROGRESS);
-//        manager.createEpic(epic);
-//        manager.getEpics().get(1).getSubTasksIds().add(2);
-//        SubTask subTask = new SubTask("сабтаск", "описание саба", Status.IN_PROGRESS, Duration.ofMinutes(45), LocalDateTime.of(2024, 5, 10, 19, 50), epic.getId());
-//        manager.createSubTask(subTask);
-//        manager.getEpicById(1);
-
         HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
         server.createContext("/tasks", new TasksHandler());
         server.createContext("/subtasks", new SubTasksHandler());

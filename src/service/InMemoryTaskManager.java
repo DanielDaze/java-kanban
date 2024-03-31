@@ -104,16 +104,12 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void createTask(Task task) {
+    public void createTask(Task task) throws DateTimeConflict {
         task.setId(generateId());
-        try {
-            if (checkTasksOverlapping(task)) {
-                throw new DateTimeConflict("Данная задача совпадает по времени с одной из ранее созданных");
-            } else {
-                tasks.put(task.getId(), task);
-            }
-        } catch (DateTimeConflict e) {
-            System.out.println(e.getMessage());
+        if (checkTasksOverlapping(task)) {
+            throw new DateTimeConflict("Данная задача совпадает по времени с одной из ранее созданных");
+        } else {
+            tasks.put(task.getId(), task);
         }
     }
 
@@ -124,16 +120,12 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void createSubTask(SubTask subTask) {
+    public void createSubTask(SubTask subTask) throws DateTimeConflict {
         subTask.setId(generateId());
-        try {
-            if (checkTasksOverlapping(subTask)) {
-                throw new DateTimeConflict("Данная задача совпадает по времени с одной из ранее созданных");
-            } else {
-                subTasks.put(subTask.getId(), subTask);
-            }
-        } catch (DateTimeConflict e) {
-            System.out.println(e.getMessage());
+        if (checkTasksOverlapping(subTask)) {
+            throw new DateTimeConflict("Данная задача совпадает по времени с одной из ранее созданных");
+        } else {
+            subTasks.put(subTask.getId(), subTask);
         }
     }
 
