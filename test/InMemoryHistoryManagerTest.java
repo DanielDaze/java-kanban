@@ -1,4 +1,4 @@
-import model.Task;
+import model.task.Task;
 import model.Status;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

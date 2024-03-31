@@ -1,4 +1,6 @@
-package model;
+package model.task;
+
+import model.Status;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -15,13 +17,13 @@ public class SubTask extends Task {
     @Override
     public String toString() {
         return "SubTask{" +
-                "epicId=" + epicId +
-                ", id=" + id +
+                "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", status=" + status +
                 ", duration=" + duration +
                 ", startTime=" + startTime +
+                ", epicId=" + epicId +
                 '}';
     }
 

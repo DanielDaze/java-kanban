@@ -1,6 +1,10 @@
 package service;
 
+import exception.DateTimeConflict;
 import model.*;
+import model.task.Epic;
+import model.task.SubTask;
+import model.task.Task;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -136,7 +140,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateTask(Task newTask, int id) {
         if (tasks.containsKey(id)) {
-            tasks.get(id).setId(newTask.getId());
+            tasks.get(id).setId(id);
             tasks.get(id).setTitle(newTask.getTitle());
             tasks.get(id).setDescription(newTask.getDescription());
             tasks.get(id).setStatus(newTask.getStatus());

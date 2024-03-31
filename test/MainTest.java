@@ -1,7 +1,7 @@
-import model.Epic;
+import model.task.Epic;
 import model.Status;
-import model.SubTask;
-import model.Task;
+import model.task.SubTask;
+import model.task.Task;
 import org.junit.jupiter.api.Test;
 import service.Managers;
 import service.TaskManager;

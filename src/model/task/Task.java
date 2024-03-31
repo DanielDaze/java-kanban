@@ -1,4 +1,6 @@
-package model;
+package model.task;
+
+import model.Status;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -19,6 +21,7 @@ public class Task {
     public void setTitle(String title) {
         this.title = title;
     }
+
 
     public String getDescription() {
         return description;
