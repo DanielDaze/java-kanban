@@ -26,12 +26,11 @@ import java.util.Map;
 import java.util.TreeSet;
 
 public class HttpTaskServer {
+    HttpServer server;
     private static final TaskManager manager = Managers.getDefault();
-    private static final Gson gson = new GsonBuilder()
-            .setPrettyPrinting()
+    private final Gson gson = new GsonBuilder()
             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
             .registerTypeAdapter(Duration.class, new DurationAdapter())
-            .serializeNulls()
             .create();
 
     private static class LocalDateTimeTypeAdapter extends TypeAdapter<LocalDateTime> {
@@ -58,7 +57,7 @@ public class HttpTaskServer {
         }
     }
 
-    private static class TasksHandler implements HttpHandler {
+    private class TasksHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             switch (exchange.getRequestMethod()) {
@@ -150,7 +149,7 @@ public class HttpTaskServer {
         }
     }
 
-    private static class SubTasksHandler implements HttpHandler {
+    private class SubTasksHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             switch (exchange.getRequestMethod()) {
@@ -242,7 +241,7 @@ public class HttpTaskServer {
         }
     }
 
-    private static class EpicsHandler implements HttpHandler {
+    private class EpicsHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             switch (exchange.getRequestMethod()) {
@@ -346,7 +345,7 @@ public class HttpTaskServer {
         }
     }
 
-    private static class HistoryHandler implements HttpHandler {
+    private class HistoryHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             if (exchange.getRequestMethod().equals("GET")) {
@@ -376,7 +375,7 @@ public class HttpTaskServer {
         }
     }
 
-    private static class PrioritizedHandler implements HttpHandler {
+    private class PrioritizedHandler implements HttpHandler {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             if (exchange.getRequestMethod().equals("GET")) {
@@ -406,14 +405,20 @@ public class HttpTaskServer {
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
+    public void start() {
+        server.start();
+    }
+
+    public void stop() {
+        server.stop(2);
+    }
+
+    public HttpTaskServer() throws IOException {
+        server = HttpServer.create(new InetSocketAddress(8080), 0);
         server.createContext("/tasks", new TasksHandler());
         server.createContext("/subtasks", new SubTasksHandler());
         server.createContext("/epics", new EpicsHandler());
         server.createContext("/history", new HistoryHandler());
         server.createContext("/prioritized", new PrioritizedHandler());
-        server.start();
-        System.out.println("Сервер запущен!");
     }
 }
