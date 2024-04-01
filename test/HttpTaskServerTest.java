@@ -11,19 +11,19 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class HttpTaskServerTest {
-    HttpTaskServer server = new HttpTaskServer();
 
-    public HttpTaskServerTest() throws IOException {
-    }
+    private HttpTaskServer server;
+    HttpClient client;
 
     @BeforeEach
-    void beforeEach() {
+    void beforeEach() throws IOException {
+        server = new HttpTaskServer();
         server.start();
+        client = HttpClient.newHttpClient();
     }
 
     @Test
     void successfulNewTask() throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
         URI uriPost = URI.create("http://localhost:8080/tasks/");
         URI uriGet = URI.create("http://localhost:8080/tasks/1");
         String body = "{\"id\":1,\"title\":\"Задание\",\"description\":\"Описание\",\"status\":\"NEW\",\"duration\":\"PT30M\",\"startTime\":\"2024-12-12T12:30\"}";
@@ -48,7 +48,6 @@ public class HttpTaskServerTest {
 
     @Test
     void nonExistingTask() throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
         URI uriPost = URI.create("http://localhost:8080/tasks/");
         URI uriGet = URI.create("http://localhost:8080/tasks/2");
         String body = "{\"id\":1,\"title\":\"Задание\",\"description\":\"Описание\",\"status\":\"NEW\",\"duration\":\"PT30M\",\"startTime\":\"2024-12-12T12:30\"}";
@@ -71,7 +70,6 @@ public class HttpTaskServerTest {
 
     @Test
     void overlappingTask() throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
         URI uriPost = URI.create("http://localhost:8080/tasks/");
         URI uriPostAnother = URI.create("http://localhost:8080/tasks/");
         String body = "{\"id\":1,\"title\":\"Задание\",\"description\":\"Описание\",\"status\":\"NEW\",\"duration\":\"PT30M\",\"startTime\":\"2024-12-12T12:30\"}";
@@ -94,7 +92,6 @@ public class HttpTaskServerTest {
 
     @Test
     void updateTask() throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
         URI uriPost = URI.create("http://localhost:8080/tasks/");
         URI uriUpdate = URI.create("http://localhost:8080/tasks/1");
         String body = "{\"id\":1,\"title\":\"Задание\",\"description\":\"Описание\",\"status\":\"NEW\",\"duration\":\"PT30M\",\"startTime\":\"2024-12-12T12:30\"}";
@@ -126,7 +123,6 @@ public class HttpTaskServerTest {
 
     @Test
     void deleteTask() throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
         URI uriPost = URI.create("http://localhost:8080/tasks/");
         URI uriDelete = URI.create("http://localhost:8080/tasks/1");
         String body = "{\"id\":1,\"title\":\"Задание\",\"description\":\"Описание\",\"status\":\"NEW\",\"duration\":\"PT30M\",\"startTime\":\"2024-12-12T12:30\"}";
@@ -150,7 +146,6 @@ public class HttpTaskServerTest {
 
     @Test
     void successfulNewSubTask() throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
         URI uriPost = URI.create("http://localhost:8080/subtasks/");
         URI uriGet = URI.create("http://localhost:8080/subtasks/1");
         String body = "{\"epicId\":2,\"id\":1,\"title\":\"сабтаск\",\"description\":\"описание саба\",\"status\":\"IN_PROGRESS\",\"duration\":\"PT45M\",\"startTime\":\"2024-05-10T19:50\"}";
@@ -175,7 +170,6 @@ public class HttpTaskServerTest {
 
     @Test
     void nonExistingSubTask() throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
         URI uriPost = URI.create("http://localhost:8080/subtasks/");
         URI uriGet = URI.create("http://localhost:8080/subtasks/2");
         String body = "{\"epicId\":2,\"id\":1,\"title\":\"сабтаск\",\"description\":\"описание саба\",\"status\":\"IN_PROGRESS\",\"duration\":\"PT45M\",\"startTime\":\"2024-05-10T19:50\"}";
@@ -198,7 +192,6 @@ public class HttpTaskServerTest {
 
     @Test
     void overlappingSubTask() throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
         URI uriPost = URI.create("http://localhost:8080/subtasks/");
         URI uriPostAnother = URI.create("http://localhost:8080/subtasks/");
         String body = "{\"epicId\":2,\"id\":1,\"title\":\"сабтаск\",\"description\":\"описание саба\",\"status\":\"IN_PROGRESS\",\"duration\":\"PT45M\",\"startTime\":\"2024-05-10T19:50\"}";
@@ -221,7 +214,6 @@ public class HttpTaskServerTest {
 
     @Test
     void updateSubTask() throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
         URI uriPost = URI.create("http://localhost:8080/subtasks/");
         URI uriUpdate = URI.create("http://localhost:8080/subtasks/1");
         String body = "{\"epicId\":2,\"id\":1,\"title\":\"сабтаск\",\"description\":\"описание саба\",\"status\":\"IN_PROGRESS\",\"duration\":\"PT45M\",\"startTime\":\"2024-05-10T19:50\"}";
@@ -253,7 +245,6 @@ public class HttpTaskServerTest {
 
     @Test
     void deleteSubTask() throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
         URI uriPost = URI.create("http://localhost:8080/tasks/");
         URI uriDelete = URI.create("http://localhost:8080/tasks/1");
         String body = "{\"epicId\":2,\"id\":1,\"title\":\"сабтаск\",\"description\":\"описание саба\",\"status\":\"IN_PROGRESS\",\"duration\":\"PT45M\",\"startTime\":\"2024-05-10T19:50\"}";
@@ -277,7 +268,6 @@ public class HttpTaskServerTest {
 
     @Test
     void successfulNewEpic() throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
         URI uriPost = URI.create("http://localhost:8080/epics/");
         URI uriPostSubtask = URI.create("http://localhost:8080/subtasks/");
         URI uriGet = URI.create("http://localhost:8080/epics/1");
@@ -310,7 +300,6 @@ public class HttpTaskServerTest {
 
     @Test
     void nonExistingEpic() throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
         URI uriPost = URI.create("http://localhost:8080/epics/");
         URI uriPostSubtask = URI.create("http://localhost:8080/subtasks/");
         URI uriGet = URI.create("http://localhost:8080/epics/2");
@@ -342,7 +331,6 @@ public class HttpTaskServerTest {
 
     @Test
     void getEpicSubtasks() throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
         URI uriPost = URI.create("http://localhost:8080/epics/");
         URI uriPostSubtask = URI.create("http://localhost:8080/subtasks/");
         URI uriGetSubtasks = URI.create("http://localhost:8080/epics/1/subtasks");
@@ -375,7 +363,6 @@ public class HttpTaskServerTest {
 
     @Test
     void deleteEpic() throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
         URI uriPost = URI.create("http://localhost:8080/epics/");
         URI uriDelete = URI.create("http://localhost:8080/epics/1");
         URI uriPostSubtask = URI.create("http://localhost:8080/subtasks/");
@@ -408,7 +395,6 @@ public class HttpTaskServerTest {
 
     @Test
     void getHistory() throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
         URI uriPost = URI.create("http://localhost:8080/tasks/");
         URI uriGet = URI.create("http://localhost:8080/tasks/1");
         URI uriGet2 = URI.create("http://localhost:8080/tasks/2");
@@ -455,7 +441,6 @@ public class HttpTaskServerTest {
 
     @Test
     void prioritizedTasks() throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
         URI uriPost = URI.create("http://localhost:8080/tasks/");
         URI uriPrioritized = URI.create("http://localhost:8080/prioritized/");
         String body = "{\"id\":1,\"title\":\"Задание\",\"description\":\"Описание\",\"status\":\"NEW\",\"duration\":\"PT30M\",\"startTime\":\"2025-12-12T12:30\"}";
@@ -489,5 +474,6 @@ public class HttpTaskServerTest {
     @AfterEach
     void afterEach() {
         server.stop();
+        client.close();
     }
 }
