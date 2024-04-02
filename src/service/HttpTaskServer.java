@@ -27,7 +27,7 @@ import java.util.TreeSet;
 
 public class HttpTaskServer {
     HttpServer server;
-    private static final TaskManager manager = Managers.getDefault();
+    private final TaskManager manager = Managers.getDefault();
     private final Gson gson = new GsonBuilder()
             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
             .registerTypeAdapter(Duration.class, new DurationAdapter())
