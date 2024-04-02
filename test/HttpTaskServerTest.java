@@ -13,7 +13,7 @@ import java.net.http.HttpResponse;
 public class HttpTaskServerTest {
 
     private HttpTaskServer server;
-    HttpClient client;
+    private HttpClient client;
 
     @BeforeEach
     void beforeEach() throws IOException {
