@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.TreeSet;
 
 public class HttpTaskServer {
-    HttpServer server;
+    private final HttpServer server;
     private final TaskManager manager = Managers.getDefault();
     private final Gson gson = new GsonBuilder()
             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
@@ -410,7 +410,7 @@ public class HttpTaskServer {
     }
 
     public void stop() {
-        server.stop(2);
+        server.stop(0);
     }
 
     public HttpTaskServer() throws IOException {
