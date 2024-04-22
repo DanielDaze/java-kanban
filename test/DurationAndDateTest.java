@@ -1,4 +1,8 @@
-import model.*;
+import exception.DateTimeConflict;
+import model.Status;
+import model.task.Epic;
+import model.task.SubTask;
+import model.task.Task;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import service.Managers;
@@ -38,7 +42,7 @@ public class DurationAndDateTest {
         taskManager.createTask(task1);
         taskManager.getTaskById(1);
         Task overlappingTask = new Task("1 задача", "описание 1 задачи", Status.NEW, Duration.ofMinutes(50), LocalDateTime.of(2024, 3, 16, 8, 20));
-        taskManager.createTask(overlappingTask);
+        Assertions.assertThrows(DateTimeConflict.class, () -> taskManager.createTask(overlappingTask));
         Assertions.assertEquals(1, taskManager.getTasks().size());
     }
 }

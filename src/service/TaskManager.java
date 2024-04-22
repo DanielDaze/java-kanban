@@ -1,9 +1,9 @@
 package service;
 
-import model.DateTimeConflict;
-import model.Epic;
-import model.SubTask;
-import model.Task;
+import exception.DateTimeConflict;
+import model.task.Epic;
+import model.task.SubTask;
+import model.task.Task;
 
 import java.util.HashMap;
 import java.util.List;

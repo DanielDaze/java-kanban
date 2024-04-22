@@ -1,4 +1,6 @@
-package model;
+package model.task;
+
+import model.Status;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -25,13 +27,13 @@ public class Epic extends Task {
     @Override
     public String toString() {
         return "Epic{" +
-                "subTasksIds=" + subTasksIds +
-                ", id=" + id +
+                "id=" + id +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", status=" + status +
                 ", duration=" + duration +
                 ", startTime=" + startTime +
+                ", subTasksIds=" + subTasksIds +
                 '}';
     }
 

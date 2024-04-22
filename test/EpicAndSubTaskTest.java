@@ -1,6 +1,6 @@
-import model.Epic;
+import model.task.Epic;
 import model.Status;
-import model.SubTask;
+import model.task.SubTask;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
